@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
@@ -6,8 +7,9 @@ using System.Text;
 namespace myservice
 {
     public interface IRedisConnectorHelper{
+        ConnectionMultiplexer Connection {get;}
     }
-    public class RedisConnectorHelper
+    public class RedisConnectorHelper : IRedisConnectorHelper
     {
         private readonly Lazy<ConnectionMultiplexer> lazyConnection;
         private readonly IConfiguration configuration;  
@@ -16,7 +18,7 @@ namespace myservice
         {
             this.configuration = configuration;  
 
-            RedisConnectorHelper.lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+            lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
             {
                 var options = new ConfigurationOptions();
                 options.EndPoints.Add(this.configuration.GetSection("Redis:Host").Value);

@@ -51,7 +51,7 @@ namespace myservice
 
             // Post-startup code goes here 
 
-            var sub = connection.GetSubscriber();
+            var sub = this.redisConnectorHelper.Connection.GetSubscriber();
             sub.Subscribe("chanel-2", (channel, message) =>
             {
                 Console.WriteLine(message);
