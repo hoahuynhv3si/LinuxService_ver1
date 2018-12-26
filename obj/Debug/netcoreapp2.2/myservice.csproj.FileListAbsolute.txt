@@ -1,0 +1,13 @@
+/home/pc/myservice/bin/Debug/netcoreapp2.2/appsettings.development.json
+/home/pc/myservice/bin/Debug/netcoreapp2.2/appsettings.json
+/home/pc/myservice/bin/Debug/netcoreapp2.2/myservice.deps.json
+/home/pc/myservice/bin/Debug/netcoreapp2.2/myservice.runtimeconfig.json
+/home/pc/myservice/bin/Debug/netcoreapp2.2/myservice.runtimeconfig.dev.json
+/home/pc/myservice/bin/Debug/netcoreapp2.2/myservice.dll
+/home/pc/myservice/bin/Debug/netcoreapp2.2/myservice.pdb
+/home/pc/myservice/obj/Debug/netcoreapp2.2/myservice.csprojAssemblyReference.cache
+/home/pc/myservice/obj/Debug/netcoreapp2.2/myservice.csproj.CoreCompileInputs.cache
+/home/pc/myservice/obj/Debug/netcoreapp2.2/myservice.AssemblyInfoInputs.cache
+/home/pc/myservice/obj/Debug/netcoreapp2.2/myservice.AssemblyInfo.cs
+/home/pc/myservice/obj/Debug/netcoreapp2.2/myservice.dll
+/home/pc/myservice/obj/Debug/netcoreapp2.2/myservice.pdb
