@@ -35,22 +35,19 @@ namespace myservice
         public Task StartAsync(CancellationToken cancellationToken)  
         {  
             this.appLifetime.ApplicationStarted.Register(Subscribe);   
-  
             return Task.CompletedTask;  
         }  
   
         public Task StopAsync(CancellationToken cancellationToken)  
         {  
             this.logger.LogInformation("StopAsync method called.");  
-            var unsub = this.redisConnectorHelper.Connection.GetSubscriber();
-            unsub.Unsubscribe("chanel-2");
             return Task.CompletedTask;  
         }  
 
         private void Subscribe()
         {
             this.logger.LogInformation("Subscribe method called.");  
-            Console.WriteLine("Subscribe method called.");  
+            Console.WriteLine("Subscribe chanel-2");  
 
             var sub = this.redisConnectorHelper.Connection.GetSubscriber();
             sub.Subscribe("chanel-2", (channel, message) =>

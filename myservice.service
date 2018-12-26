@@ -1,0 +1,18 @@
+[Unit]
+Description = myservice
+
+[Service]
+ExecStart = /usr/bin/dotnet /etc/myservice/myservice.dll
+WorkingDirectory = /etc/myservice/
+ProtectSystem=true
+ReadWriteDirectories=-/etc/myservice
+TimeoutStopSec=0
+Restart=on-failure  
+User=myservice
+Group=myservice
+RuntimeDirectory = myservice
+RuntimeDirectoryMode=2755
+
+[Install] 
+WantedBy = multi-user.target
+Alias = myservice.service
