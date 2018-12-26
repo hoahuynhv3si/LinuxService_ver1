@@ -10,26 +10,24 @@ namespace myservice
 {  
     public class ApplicationLifetimeHostedService : IHostedService  
     {  
-        IApplicationLifetime appLifetime;  
-        ILogger<ApplicationLifetimeHostedService> logger;  
-        IHostingEnvironment environment;  
-        IConfiguration configuration;  
-        private ConnectionMultiplexer connection;
+        private readonly IApplicationLifetime appLifetime;  
+        private readonly ILogger<ApplicationLifetimeHostedService> logger;  
+        private readonly IHostingEnvironment environment;  
+        private readonly IConfiguration configuration;  
+        private readonly IRedisConnectorHelper redisConnectorHelper;
+        
         public ApplicationLifetimeHostedService(  
             IConfiguration configuration,  
             IHostingEnvironment environment,  
             ILogger<ApplicationLifetimeHostedService> logger,   
-            IApplicationLifetime appLifetime)  
+            IApplicationLifetime appLifetime,
+            IRedisConnectorHelper redisConnectorHelper)  
         {  
             this.configuration = configuration;  
             this.logger = logger;  
             this.appLifetime = appLifetime;  
             this.environment = environment;  
-            
-            var options = new ConfigurationOptions();
-            options.EndPoints.Add(this.configuration.GetSection("Redis:Host").Value);
-            options.EndPoints.Add(this.configuration.GetSection("Redis:Port").Value);
-            connection = ConnectionMultiplexer.Connect(options);
+            this.redisConnectorHelper = redisConnectorHelper;
         
         }  
   

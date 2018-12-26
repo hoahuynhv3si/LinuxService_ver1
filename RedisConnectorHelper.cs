@@ -6,26 +6,25 @@ using System.Text;
 namespace myservice
 {
     public interface IRedisConnectorHelper{
-
     }
     public class RedisConnectorHelper
     {
-        static RedisConnectorHelper()
+        private readonly Lazy<ConnectionMultiplexer> lazyConnection;
+        private readonly IConfiguration configuration;  
+
+        public RedisConnectorHelper(IConfiguration configuration)
         {
+            this.configuration = configuration;  
+
             RedisConnectorHelper.lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
             {
-                return ConnectionMultiplexer.Connect("localhost");
+                var options = new ConfigurationOptions();
+                options.EndPoints.Add(this.configuration.GetSection("Redis:Host").Value);
+                options.EndPoints.Add(this.configuration.GetSection("Redis:Port").Value);
+                return ConnectionMultiplexer.Connect(options);
             });
         }
 
-        private static Lazy<ConnectionMultiplexer> lazyConnection;
-
-        public static ConnectionMultiplexer Connection
-        {
-            get
-            {
-                return lazyConnection.Value;
-            }
-        }
+        public ConnectionMultiplexer Connection => lazyConnection.Value;
     }
 }

@@ -24,8 +24,6 @@ namespace myservice
                  {  
                      configHost.SetBasePath(Directory.GetCurrentDirectory());  
                      configHost.AddEnvironmentVariables(prefix: "ASPNETCORE_");  
-                     //configHost.AddCommandLine(args); 
-                    // Console.WriteLine(args);
                  })  
                  
             .ConfigureAppConfiguration((hostContext, configApp) =>  
@@ -34,13 +32,13 @@ namespace myservice
                      configApp.AddEnvironmentVariables(prefix: "ASPNETCORE_");  
                      configApp.AddJsonFile($"appsettings.json", true);  
                      configApp.AddJsonFile($"appsettings.{hostContext.HostingEnvironment.EnvironmentName}.json", true);  
-                     //configApp.AddCommandLine(args);  
                  })   
                  
                  .ConfigureServices((hostContext, services) =>  
                 {  
                     services.AddLogging();
                     //services.AddHostedService<ApplicationLifetimeHostedService>();   
+                    services.AddSingleton<IRedisConnectorHelper, RedisConnectorHelper>();
                     services.AddSingleton<IHostedService, RedisService>();
                 })  
                 
@@ -52,21 +50,6 @@ namespace myservice
                 })  
                 
             .Build();  
-
-
-            /* 
-            var redis = RedisConnectorHelper.Connection.GetDatabase();
-            var sub = redis.Multiplexer.GetSubscriber();
-            sub.Subscribe("chanel-1", (channel, message) =>
-            {
-                Console.WriteLine(message);
-                using (StreamWriter writter = System.IO.File.AppendText("logFile.txt"))
-                {
-                    writter.WriteLine($"[{DateTime.UtcNow.ToString("MM/dd/yyyy HH:mm:ss", CultureInfo.InvariantCulture)}] {(string)message}");
-                }
-            });
-
-            */
 
             await host.RunAsync();  
         }

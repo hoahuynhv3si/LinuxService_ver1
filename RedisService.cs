@@ -10,43 +10,61 @@ namespace myservice
 {
     public class RedisService : IHostedService
     {
-        private ConnectionMultiplexer connection;
-        private readonly IConfiguration configuration;  
+        private readonly IApplicationLifetime appLifetime;  
         private readonly ILogger<ApplicationLifetimeHostedService> logger;  
+        private readonly IHostingEnvironment environment;  
+        private readonly IConfiguration configuration;  
+        private readonly IRedisConnectorHelper redisConnectorHelper;
 
         public RedisService(
-            IConfiguration configuration,
-            ILogger<ApplicationLifetimeHostedService> logger
+            IConfiguration configuration,  
+            IHostingEnvironment environment,  
+            ILogger<ApplicationLifetimeHostedService> logger,   
+            IApplicationLifetime appLifetime,
+            IRedisConnectorHelper redisConnectorHelper
         )
         {
-            this.configuration = configuration; 
+           this.configuration = configuration;  
             this.logger = logger;  
-
-            var options = new ConfigurationOptions();
-            options.EndPoints.Add(this.configuration.GetSection("Redis:Host").Value);
-            options.EndPoints.Add(this.configuration.GetSection("Redis:Port").Value);
-            connection = ConnectionMultiplexer.Connect(options);
-        
+            this.appLifetime = appLifetime;  
+            this.environment = environment;  
+            this.redisConnectorHelper = redisConnectorHelper;
         }
 
         
-        public Task StartAsync(CancellationToken cancellationToken)
-        {
-            Console.WriteLine("StartAsync Method Subscribe chanel-2");
+        public Task StartAsync(CancellationToken cancellationToken)  
+        {  
+            this.logger.LogInformation("StartAsync method called.");  
+            Console.WriteLine("StartAsync method called.");  
+  
+            this.appLifetime.ApplicationStarted.Register(OnStarted);   
+  
+            return Task.CompletedTask;  
+  
+        }  
+  
+        private void OnStarted()  
+        {  
+            this.logger.LogInformation("OnStarted method called.");  
+            Console.WriteLine("OnStarted method called.");  
+
+            // Post-startup code goes here 
+
             var sub = connection.GetSubscriber();
             sub.Subscribe("chanel-2", (channel, message) =>
             {
                 Console.WriteLine(message);
                 this.logger.LogDebug($"StartAsync method : {message}");  
             });
+ 
+        }  
 
-            return Task.CompletedTask;
-        } 
-        public Task StopAsync(CancellationToken cancellationToken)
-        {
-            this.logger.LogDebug("StopAsync method called.");  
   
-            return Task.CompletedTask; 
-        }
+        public Task StopAsync(CancellationToken cancellationToken)  
+        {  
+            this.logger.LogInformation("StopAsync method called.");  
+  
+            return Task.CompletedTask;  
+        }  
     }
 }
